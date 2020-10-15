@@ -6,9 +6,10 @@ region='eu-central-1'
 # sqs = boto3.resource('sqs')
 # queue = sqs.create_queue(QueueName='test', Attributes={'DelaySeconds': '5'})
 
-s3 = boto3.resource('s3')
-for bucket in s3.buckets.all():
-    print(bucket.name)
+s3_client = boto3.client('s3')
+buckets = s3_client.list_buckets()
+for bucket in buckets ['Buckets']:
+    print(bucket['CreationDate'].ctime(), bucket['Name'])
 
 try:
     if region is None:
@@ -22,4 +23,5 @@ except ClientError as e:
     logging.error(e)
 
 data = open('test.jpg', 'rb')
-s3.Bucket('gjmtest-serverless').put_object(Key='test.jpg', Body=data)
+with open("test.jpg", "rb") as f:
+    s3_client.upload_fileobj(f, "gjmtest-serverless", "testupload")
