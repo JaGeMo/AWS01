@@ -32,24 +32,39 @@ s3.createBucket({Bucket: bucketName}, function(err, data) {
   if (err) {
       console.log(err);
     } else {
-      console.log("Successfully uploaded data to myBucket/myKey");
+      console.log("Successfully created bucket");
+      s3.listBuckets(function(error, data) {
+        if (error) {
+          console.log("Error", error);
+        } else {
+          console.log("Successful retrieved bucket data", data.Buckets);
+        }
+      });
+      s3.deleteBucket({Bucket: bucketName}, function(err, data) {
+        if (err) {
+            console.log(err);
+          } else {
+            console.log("Successfully deleted bucket");
+          }
+        }
+      );
     }
   }
 )
 
-s3.listBuckets(function(error, data) {
-  if (error) {
-    console.log("Error", error);
-  } else {
-    console.log("Success", data.Buckets);
-  }
-});
+// s3.listBuckets(function(error, data) {
+//   if (error) {
+//     console.log("Error", error);
+//   } else {
+//     console.log("Success", data.Buckets);
+//   }
+// });
 
-s3.deleteBucket({Bucket: bucketName}, function(err, data) {
-  if (err) {
-      console.log(err);
-    } else {
-      console.log("Successfully uploaded data to myBucket/myKey");
-    }
-  }
-);
+// s3.deleteBucket({Bucket: bucketName}, function(err, data) {
+//   if (err) {
+//       console.log(err);
+//     } else {
+//       console.log("Successfully uploaded data to myBucket/myKey");
+//     }
+//   }
+// );
