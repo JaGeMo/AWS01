@@ -11,46 +11,50 @@ AWS.config.getCredentials(function(err) {
     }
 });
 
-// Call S3 to list the buckets
 s3 = new AWS.S3({apiVersion: '2006-03-01'});
-s3.listBuckets(function(error, data) {
-  if (error) {
-    console.log("Error", error);
-  } else {
-    console.log("Success", data.Buckets);
-  }
-});
-
 // Create unique bucket name
 var bucketName = uuid.v4();
 // Create name for uploaded object key
 var keyName = 'checkTest';
 
-// Create a promise on S3 service object
-// new AWS.S3({apiVersion: '2006-03-01'}).createBucket({Bucket: bucketName}, {Key: keyName}, function(err, data) {
-s3.createBucket({Bucket: bucketName}, function(err, data) {
-  if (err) {
-      console.log(err);
+s3.createBucket({Bucket: bucketName}, (error, data) => {
+  if (error) {
+      console.log(error);
     } else {
-      console.log("Successfully created bucket");
-      s3.listBuckets(function(error, data) {
+      console.log("successfully created bucket");
+      s3.listBuckets((error, data) => {
         if (error) {
-          console.log("Error", error);
+          console.log("error", error);
         } else {
-          console.log("Successful retrieved bucket data", data.Buckets);
+          console.log("successfully retrieved bucket data", data.Buckets);
+          data.Buckets.forEach(element => {
+            s3.deleteBucket({Bucket: element.Name}, (error, data) => {
+              if(error) {
+                console.log("nameE: " + element.Name)
+                console.log("deleting bucket failed");
+              }
+              else {
+                console.log("nameS: " + element.Name)
+                console.log( "deleting bucket " + element.name + " successful");
+                console.log(data);
+              }
+            })  
+          });
+          
         }
       });
-      s3.deleteBucket({Bucket: bucketName}, function(err, data) {
-        if (err) {
-            console.log(err);
-          } else {
-            console.log("Successfully deleted bucket");
-          }
-        }
-      );
     }
   }
 )
+
+// s3.deleteBucket({Bucket: bucketName}, function(err, data) {
+//   if (err) {
+//       console.log(err);
+//     } else {
+//       console.log("Successfully deleted bucket");
+//     }
+//   }
+// );
 
 // s3.listBuckets(function(error, data) {
 //   if (error) {
@@ -59,12 +63,3 @@ s3.createBucket({Bucket: bucketName}, function(err, data) {
 //     console.log("Success", data.Buckets);
 //   }
 // });
-
-// s3.deleteBucket({Bucket: bucketName}, function(err, data) {
-//   if (err) {
-//       console.log(err);
-//     } else {
-//       console.log("Successfully uploaded data to myBucket/myKey");
-//     }
-//   }
-// );
