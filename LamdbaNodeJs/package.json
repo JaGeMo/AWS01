@@ -1,6 +1,7 @@
 {
   "dependencies": {
-    "aws-sdk": "^2.771.0"
+    "aws-sdk": "^2.771.0",
+    "enquirer": "^2.3.6"
   },
   "name": "aws-nodejs-deploy",
   "description": "Node.js deployment based on AWS SDK for Node.js.",
