@@ -1,0 +1,3 @@
+
+AWS_REGIONS="$(aws ec2 describe-regions --profile private --query 'Regions[].RegionName' --output text)"
+for each_region in ${AWS_REGIONS} ; do aws ec2 import-key-pair --key-name WebServer --public-key-material fileb://~/.ssh/WebServer1.pub --region $each_region  --profile private; done

@@ -5,10 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Attach to Process",
-            "type": "node",
-            "request": "attach",
-            "port": 9229
+            "name": "Launch Program",
+            "program": "${workspaceFolder}/deploy.js",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "pwa-node"
         }
+        
+        
     ]
 }

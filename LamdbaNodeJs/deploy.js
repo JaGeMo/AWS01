@@ -3,6 +3,8 @@ var AWS = require('aws-sdk');
 var uuid = require('uuid');
 const { MultiSelect } = require("enquirer");
 
+AWS.config.update({region: 'eu-central-1'});
+
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 // check creds
@@ -45,6 +47,19 @@ function createBucketAndListAllBuckets() {
 
 const main = async () => {
   createBucketAndListAllBuckets()
+    .then(() => {
+      return loadBucketList();
+    })
+    .then((result) => { 
+      result.Buckets.forEach((bucket) => {
+      console.log("second time list: " + bucket.Name)
+      })
+      // console.log("test: \n", result.Buckets[0].Name, "\n");
+      return loadBucketAcls(result.Buckets[0].Name);
+    })
+    .then(() => {
+      console.log("test*****");
+    })
     .then( async () => {
       const { Buckets } = await s3.listBuckets().promise();
       const choices = Buckets.map(({ Name }) => ({ name: Name, value: Name }));
@@ -65,6 +80,9 @@ const main = async () => {
         `\nDeleted ${deletedBuckets}/${bucketsToDelete.length} buckets.\n`
       );
     })
+    .catch((err) => {
+      console.log("error: " + err);
+    })
 }
 
 main();
@@ -80,6 +98,24 @@ function loadBucketList() {
       }
     })
   })
+}
+
+function loadBucketAcls(bucketName) {
+  return new Promise((resolve, reject) => {
+    console.log("bucketName: " + bucketName);
+    var bucketParams = {Bucket: bucketName};
+    s3.getBucketAcl(bucketParams, function(err, data) {
+      if (err) {
+        console.log("Error", err);
+        reject(err);
+      } else if (data) {
+        console.log("Success", data.Grants);
+          resolve();
+      }
+    });
+  }
+
+  )
 }
 
 const deleteBucket = async Bucket => {
@@ -105,16 +141,3 @@ const deleteBucket = async Bucket => {
   }
 };
 
-
-function deleteSingleBucket(bucketName) {
-  return new Promise((resolve, reject) => {
-  s3.deleteBucket({Bucket: bucketName}, function(err, data) {
-    if (err) {
-        reject(new err("successfully deleted bucket"));
-      } else {
-        resolve(data);
-      }
-    }
-  );
-  })
-}
