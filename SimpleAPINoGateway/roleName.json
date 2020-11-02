@@ -1,0 +1,25 @@
+{
+  "Role": {
+    "Path": "/",
+    "RoleName": "LambdaAPIDynamoDBAccess",
+    "RoleId": "AROAU3HVDBZ44SYTX46PZ",
+    "Arn": "arn:aws:iam::333373967993:role/LambdaAPIDynamoDBAccess",
+    "CreateDate": "2020-11-02T08:41:34+00:00",
+    "AssumeRolePolicyDocument": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Principal": { "Service": "lambda.amazonaws.com" },
+          "Action": "sts:AssumeRole"
+        }
+      ]
+    },
+    "Description": "Allows Lambda functions to call DynamoDB on your behalf.",
+    "MaxSessionDuration": 3600,
+    "RoleLastUsed": {
+      "LastUsedDate": "2020-11-02T09:40:20+00:00",
+      "Region": "eu-central-1"
+    }
+  }
+}

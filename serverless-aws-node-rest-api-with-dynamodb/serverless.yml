@@ -7,6 +7,7 @@ provider:
   runtime: nodejs12.x
   region: us-east-1
   profile: serverless-admin
+  stage: prod
   environment:
     DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
   iamRoleStatements:
